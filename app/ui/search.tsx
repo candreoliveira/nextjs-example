@@ -2,24 +2,29 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
-
-function handleSearch(opts: {term: string, searchParams: string, pathname: string, replace: Function}) {
-  const params = new URLSearchParams(opts.searchParams);
-
-  if(opts.term) {
-    params.set('query', opts.term);
-  } else {
-    params.delete('query');
-  }
-
-  opts.replace(`${opts.pathname}?${params.toString()}`);
-}
 
 export default function Search({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const handleSearch = useDebouncedCallback(
+  
+    (opts: {term: string, searchParams: string, pathname: string, replace: Function}) => {
+      const params = new URLSearchParams(opts.searchParams);
+      params.set('page', '1');
+  
+      if(opts.term) {
+        params.set('query', opts.term);
+      } else {
+        params.delete('query');
+      }
+  
+      opts.replace(`${opts.pathname}?${params.toString()}`);
+    }, 
+  
+  300);
 
   return (
     <>
