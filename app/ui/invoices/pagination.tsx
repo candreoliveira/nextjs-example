@@ -5,19 +5,33 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { generatePagination } from '@/app/lib/utils';
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
-  // NOTE: Uncomment this code in Chapter 7
+function createPageURL({
+  searchParams, 
+  pathname,
+  page
+}: {
+  searchParams: string, 
+  pathname: string,
+  page: number
+}) {
+  const params = new URLSearchParams(searchParams);
+  params.set('page', page.toString());
+  return `${pathname}?${params}`;
+}
 
-  // const allPages = generatePagination(currentPage, totalPages);
-
+export default function Pagination({ 
+  totalPages, currentPage, pathname, searchParams 
+}: { 
+  totalPages: number, currentPage: number, pathname: string, searchParams: string 
+}) {
+  const allPages = generatePagination(currentPage, totalPages);
+  
   return (
     <>
-      {/*  NOTE: Uncomment this code in Chapter 7 */}
-
-      {/* <div className="inline-flex">
+      <div className="inline-flex">
         <PaginationArrow
           direction="left"
-          href={createPageURL(currentPage - 1)}
+          href={createPageURL({pathname, searchParams, page: currentPage - 1})}
           isDisabled={currentPage <= 1}
         />
 
@@ -33,7 +47,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
             return (
               <PaginationNumber
                 key={page}
-                href={createPageURL(page)}
+                href={createPageURL({pathname, searchParams, page})}
                 page={page}
                 position={position}
                 isActive={currentPage === page}
@@ -44,10 +58,10 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
         <PaginationArrow
           direction="right"
-          href={createPageURL(currentPage + 1)}
+          href={createPageURL({pathname, searchParams, page: currentPage + 1})}
           isDisabled={currentPage >= totalPages}
         />
-      </div> */}
+      </div>
     </>
   );
 }
