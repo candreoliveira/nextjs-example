@@ -17,11 +17,12 @@ export default async function Page({ params, searchParams }: {
     slug: string
   }
 }) {
+  const h = headers();
   const query = searchParams?.query ||  '';
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchInvoicesPages();
-  const pathname = headers()?.['x-current-path'] || "";
-  const opts = headers()?.['x-current-params'] || "";
+  const pathname = h.get('x-current-path') || "";
+  const opts = h.get('x-current-params') || "";
 
   return (
     <div className="w-full">
