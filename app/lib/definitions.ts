@@ -17,8 +17,16 @@ export type Card = {
   numberOfCustomers: number
 };
 
-export interface CardWrapper {
-  ...Card
+export type Invoice = {
+  id: string; // Will be created on the database
+  customer_id: string;
+  amount: number; // Stored in cents
+  status: 'pending' | 'paid';
+  date: string;
+};
+
+export interface CardWrapper extends Card {
+
 };
 
 export type Customer = {
